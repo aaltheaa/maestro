@@ -1,5 +1,7 @@
 # Maestro
 
+*Music is movement and teaching is an art.* Maestro is an AI educator agent that helps you learn MIT OpenCourseWare (OCW).
+
 **AI-powered learning platform for MIT OpenCourseWare.**
 
 Maestro turns MIT OCW's raw course pages into structured, navigable learning dashboards — with an AI tutor grounded in course materials, a discovery agent that recommends courses from your learning goals, and a roadmap that sequences everything into a coherent path.
