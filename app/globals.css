@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=DM+Sans:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy: #1b2d3e;
+  --navy-light: #2e4558;
+  --cream: #f6f3ed;
+  --cream-dark: #ede9e1;
+  --amber: #c98a1a;
+  --amber-light: #fef3e2;
+  --amber-border: #f0d090;
+  --sage: #2e7d5a;
+  --sage-light: #e8f5ef;
+  --sage-border: #b8ddc8;
+  --stone-border: #e5dfd6;
+  --stone-muted: #9a8f7e;
+  --stone-text: #5c6475;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background-color: var(--cream);
+  color: var(--navy);
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Fraunces utility */
+.font-serif {
+  font-family: 'Fraunces', serif;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--stone-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--stone-muted);
+}
+
+/* Focus rings */
+*:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
