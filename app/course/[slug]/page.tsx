@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { use, useState, useRef, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Nav from '@/components/Nav'
 import { MOCK_COURSES } from '@/lib/mock-data'
-import { buildTutorSystemPrompt } from '@/lib/anthropic'
+import { buildTutorSystemPrompt } from '@/lib/prompts'
 import type { Course, Week, ChatMessage } from '@/lib/types'
-import { maestroFetch } from '@/lib/maestro-fetch'
+import { maestroFetch, getErrorMessage } from '@/lib/maestro-fetch'
 import { useProgress } from '@/lib/use-progress'
 
 // ─── Progress circle ──────────────────────────────────────────────────────────
@@ -300,9 +301,16 @@ function MaestroChat({ course }: { course: Course }) {
         }),
       })
       const data = await res.json()
-      setMessages(m => [...m, { role: 'assistant', content: data.text ?? 'Sorry, I had trouble responding.' }])
-    } catch {
-      setMessages(m => [...m, { role: 'assistant', content: 'Connection issue — please try again.' }])
+      if (!res.ok) {
+        setMessages(m => [...m, { role: 'assistant', content: getErrorMessage(data.code) }])
+      } else {
+        setMessages(m => [...m, { role: 'assistant', content: data.text ?? 'Sorry, I had trouble responding.' }])
+      }
+    } catch (err) {
+      const msg = err instanceof Error && err.message === 'rate_limit_client'
+        ? 'You\'re sending messages too quickly — please wait a moment.'
+        : 'Connection issue — please try again.'
+      setMessages(m => [...m, { role: 'assistant', content: msg }])
     }
     setLoading(false)
   }
@@ -388,14 +396,23 @@ function MaestroChat({ course }: { course: Course }) {
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 
-export default function CourseDashboardPage({ params }: { params: { slug: string } }) {
-  const course = MOCK_COURSES.find(c => c.slug === params.slug) ?? MOCK_COURSES[0]
-  const { completed, toggle, isLoading } = useProgress(course.slug)
+export default function CourseDashboardPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = use(params)
+  const router = useRouter()
+  const course = MOCK_COURSES.find(c => c.slug === slug)
 
+  useEffect(() => {
+    if (!course) router.push('/signup')
+  }, [course, router])
+
+  const { completed, toggle, isLoading } = useProgress(course?.slug ?? slug)
   const [activeWeek, setActiveWeek] = useState(0)
   const [tab, setTab] = useState<'lectures' | 'readings' | 'assignments' | 'overview'>('lectures')
 
-  const wk = course.weeks[activeWeek]
+  if (!course) return null
+
+  const weeks = course.weeks
+  const wk = weeks[activeWeek]
 
   // Count done items for progress display
   const totalItems = course.weeks.reduce(

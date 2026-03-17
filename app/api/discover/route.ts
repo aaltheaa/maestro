@@ -5,6 +5,7 @@ import {
   DISCOVER_SYSTEM_PROMPT,
   COURSE_PREVIEW_SYSTEM_PROMPT,
 } from '@/lib/anthropic'
+import { classifyAnthropicError } from '@/lib/api-errors'
 
 export async function POST(req: NextRequest) {
   try {
@@ -52,6 +53,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ text, courses })
   } catch (err) {
     console.error('[/api/discover]', err)
-    return NextResponse.json({ error: 'Internal error' }, { status: 500 })
+    const { status, body } = classifyAnthropicError(err)
+    return NextResponse.json(body, { status })
   }
 }

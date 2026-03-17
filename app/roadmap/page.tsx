@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Nav from '@/components/Nav'
 import { MOCK_ROADMAP } from '@/lib/mock-data'
 import type { RoadmapCourse, Roadmap } from '@/lib/types'
-import { maestroFetch } from '@/lib/maestro-fetch'
+import { maestroFetch, getErrorMessage } from '@/lib/maestro-fetch'
 import { getUserId } from '@/lib/user-id'
 
 const STATUS_LABEL: Record<string, string> = {
@@ -272,11 +272,18 @@ export default function RoadmapPage() {
         }),
       })
       const data = await res.json()
-      setInsight(data.text ?? '')
-      // Persist current roadmap state after any adjustment
-      await persistRoadmap(roadmap)
-    } catch {
-      setInsight('Having trouble connecting — please try again.')
+      if (!res.ok) {
+        setInsight(getErrorMessage(data.code))
+      } else {
+        setInsight(data.text ?? '')
+        // Persist current roadmap state after any adjustment
+        await persistRoadmap(roadmap)
+      }
+    } catch (err) {
+      const msg = err instanceof Error && err.message === 'rate_limit_client'
+        ? 'You\'re sending requests too quickly — please wait a moment.'
+        : 'Having trouble connecting — please try again.'
+      setInsight(msg)
     }
     setInsightLoading(false)
     setAdjustQuery('')

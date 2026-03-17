@@ -60,35 +60,13 @@ export default function ApiKeyGate({ children }: { children: React.ReactNode }) 
           Maestro
         </span>
 
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            className="text-sm px-2.5 py-1.5 rounded-lg transition-colors"
-            style={{ color: '#7a9ab0' }}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            title="Preview your learning"
-          >
-            My learning
-          </button>
-          <button
-            type="button"
-            className="text-sm px-2.5 py-1.5 rounded-lg transition-colors"
-            style={{ color: '#7a9ab0' }}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            title="Preview your roadmap"
-          >
-            My roadmap
-          </button>
-          <button
-            type="button"
-            className="text-sm px-4 py-1.5 rounded-lg font-medium transition-colors"
-            style={{ background: 'var(--amber)', color: '#fff' }}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            title="Add a course"
-          >
-            + Add course
-          </button>
-        </div>
+        <a
+          href="/"
+          className="text-sm px-4 py-1.5 rounded-lg transition-colors"
+          style={{ color: '#7a9ab0', textDecoration: 'none' }}
+        >
+          ← Go back to demo
+        </a>
       </nav>
 
       {/* Setup card at the top of the page */}

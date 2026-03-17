@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Nav from '@/components/Nav'
 import DemoShowcase from '@/components/DemoShowcase'
 import { BROWSE_COURSES } from '@/lib/mock-data'
-import { maestroFetch } from '@/lib/maestro-fetch'
+import { maestroFetch, getErrorMessage } from '@/lib/maestro-fetch'
 import { useEnrolledCourses } from '@/lib/use-enrolled-courses'
 
 const EXAMPLES = [
@@ -40,10 +40,17 @@ export default function HomePage() {
         body: JSON.stringify({ query: text }),
       })
       const data = await res.json()
-      setResponse(data.text ?? '')
-      setRecCourses(data.courses ?? [])
-    } catch {
-      setResponse('Having trouble connecting — please try again.')
+      if (!res.ok) {
+        setResponse(getErrorMessage(data.code))
+      } else {
+        setResponse(data.text ?? '')
+        setRecCourses(data.courses ?? [])
+      }
+    } catch (err) {
+      const msg = err instanceof Error && err.message === 'rate_limit_client'
+        ? 'You\'re sending requests too quickly — please wait a moment.'
+        : 'Having trouble connecting — please try again.'
+      setResponse(msg)
     }
     setLoading(false)
   }

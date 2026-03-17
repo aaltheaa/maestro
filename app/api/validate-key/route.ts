@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { classifyAnthropicError } from '@/lib/api-errors'
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,16 +20,11 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ valid: true })
   } catch (err: unknown) {
-    // Anthropic throws an AuthenticationError for invalid keys
-    const isAuthError =
-      err instanceof Error &&
-      (err.message.includes('authentication') ||
-        err.message.includes('API key') ||
-        err.message.includes('401'))
-
+    const { body } = classifyAnthropicError(err)
     return NextResponse.json({
       valid: false,
-      error: isAuthError ? 'Invalid API key' : 'Validation failed',
+      error: body.error,
+      code: body.code,
     })
   }
 }

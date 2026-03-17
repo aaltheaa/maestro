@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import type { ChatMessage } from '@/lib/types'
 import { MODEL } from '@/lib/anthropic'
+import { classifyAnthropicError } from '@/lib/api-errors'
 
 export async function POST(req: NextRequest) {
   try {
@@ -32,6 +33,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ text })
   } catch (err) {
     console.error('[/api/chat]', err)
-    return NextResponse.json({ error: 'Internal error' }, { status: 500 })
+    const { status, body } = classifyAnthropicError(err)
+    return NextResponse.json(body, { status })
   }
 }

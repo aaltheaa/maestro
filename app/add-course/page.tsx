@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Nav from '@/components/Nav'
 import type { ParsedOCWCourse } from '@/lib/types'
-import { maestroFetch } from '@/lib/maestro-fetch'
+import { maestroFetch, getErrorMessage } from '@/lib/maestro-fetch'
 import { getUserId } from '@/lib/user-id'
 
 // ─── Step indicator ───────────────────────────────────────────────────────────
@@ -100,9 +100,16 @@ export default function AddCoursePage() {
         body: JSON.stringify({ query: title, mode: 'preview' }),
       })
       const data = await res.json()
-      setInsight(data.text ?? '')
-    } catch {
-      setInsight('')
+      if (!res.ok) {
+        setInsight(getErrorMessage(data.code))
+      } else {
+        setInsight(data.text ?? '')
+      }
+    } catch (err) {
+      const msg = err instanceof Error && err.message === 'rate_limit_client'
+        ? 'You\'re sending requests too quickly — please wait a moment.'
+        : ''
+      setInsight(msg)
     }
     setInsightLoading(false)
   }
@@ -523,7 +530,13 @@ export default function AddCoursePage() {
             </p>
             <div className="flex flex-col gap-2.5">
               <button
-                onClick={() => router.push('/course/graphic-design-history')}
+                onClick={() => {
+                  const slug = parsed?.title
+                    ?.toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/(^-|-$)/g, '') ?? ''
+                  router.push(slug ? `/course/${slug}` : '/signup')
+                }}
                 className="w-full py-3 rounded-xl text-sm font-medium"
                 style={{ background: 'var(--navy)', color: '#f0e8d0' }}
               >
