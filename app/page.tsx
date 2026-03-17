@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Nav from '@/components/Nav'
+import DemoShowcase from '@/components/DemoShowcase'
 import { BROWSE_COURSES } from '@/lib/mock-data'
 import { maestroFetch } from '@/lib/maestro-fetch'
 import { useEnrolledCourses } from '@/lib/use-enrolled-courses'
@@ -52,7 +53,7 @@ export default function HomePage() {
       <Nav />
 
       {/* Hero */}
-      <div className="max-w-3xl mx-auto px-6 pt-14 pb-10 text-center">
+      <div className="max-w-5xl mx-auto px-6 pt-10 pb-6 text-center">
         <p
           className="text-xs uppercase tracking-widest mb-3 font-medium"
           style={{ color: 'var(--amber)' }}
@@ -188,7 +189,7 @@ export default function HomePage() {
       </div>
 
       {/* My Courses */}
-      <div className="max-w-5xl mx-auto px-6 pb-10">
+      <div className="max-w-5xl mx-auto px-6 pb-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-serif text-xl" style={{ fontWeight: 500 }}>Continue learning</h2>
           <span className="text-sm cursor-pointer" style={{ color: 'var(--amber)' }}>
@@ -282,7 +283,7 @@ export default function HomePage() {
       <div className="mx-8 mb-9" style={{ height: 1, background: 'var(--stone-border)' }} />
 
       {/* Browse OCW */}
-      <div className="max-w-5xl mx-auto px-6 pb-16">
+      <div className="max-w-5xl mx-auto px-6 pb-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-serif text-xl" style={{ fontWeight: 500 }}>
             Browse MIT OpenCourseWare
@@ -315,6 +316,10 @@ export default function HomePage() {
           ))}
         </div>
       </div>
+
+      {/* Demo section (mock data only) */}
+      <div className="mx-8 mb-6" style={{ height: 1, background: 'var(--stone-border)' }} />
+      <DemoShowcase />
     </div>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useApiKey } from '@/lib/api-key-context'
 
 export default function ApiKeyGate({ children }: { children: React.ReactNode }) {
@@ -12,8 +12,12 @@ export default function ApiKeyGate({ children }: { children: React.ReactNode }) 
   // Don't render anything until localStorage is hydrated
   if (!isReady) return null
 
-  // Already has a key — show the app
-  if (apiKey) return <>{children}</>
+  // If a key is already set, gently send people back home
+  useEffect(() => {
+    if (apiKey && typeof window !== 'undefined') {
+      window.location.href = '/'
+    }
+  }, [apiKey])
 
   const validate = async () => {
     const trimmed = input.trim()
@@ -52,19 +56,43 @@ export default function ApiKeyGate({ children }: { children: React.ReactNode }) 
         style={{ background: 'var(--navy)' }}
         className="flex items-center justify-between px-7 py-3.5"
       >
-        <span
-          className="font-serif text-xl"
-          style={{ color: '#f0e8d0', letterSpacing: '-0.3px' }}
-        >
+        <span className="font-serif text-xl" style={{ color: '#f0e8d0', letterSpacing: '-0.3px' }}>
           Maestro
         </span>
-        <span className="text-xs" style={{ color: '#5a7a90', letterSpacing: '1.5px' }}>
-          MIT OCW
-        </span>
+
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="text-sm px-2.5 py-1.5 rounded-lg transition-colors"
+            style={{ color: '#7a9ab0' }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            title="Preview your learning"
+          >
+            My learning
+          </button>
+          <button
+            type="button"
+            className="text-sm px-2.5 py-1.5 rounded-lg transition-colors"
+            style={{ color: '#7a9ab0' }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            title="Preview your roadmap"
+          >
+            My roadmap
+          </button>
+          <button
+            type="button"
+            className="text-sm px-4 py-1.5 rounded-lg font-medium transition-colors"
+            style={{ background: 'var(--amber)', color: '#fff' }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            title="Add a course"
+          >
+            + Add course
+          </button>
+        </div>
       </nav>
 
-      {/* Setup card */}
-      <div className="flex-1 flex items-center justify-center px-6 py-16">
+      {/* Setup card at the top of the page */}
+      <div className="px-6 pt-10 pb-8 flex justify-center">
         <div
           className="w-full max-w-md rounded-2xl p-8"
           style={{ background: '#fff', border: '1px solid var(--stone-border)' }}
@@ -170,6 +198,8 @@ export default function ApiKeyGate({ children }: { children: React.ReactNode }) 
           </p>
         </div>
       </div>
+
+      {/* No children here — this page is just for API key setup */}
     </div>
   )
 }

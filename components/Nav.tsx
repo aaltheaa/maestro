@@ -13,9 +13,7 @@ export default function Nav({ backLabel, backHref }: NavProps) {
   const { apiKey, clearApiKey } = useApiKey()
   const [showKeyMenu, setShowKeyMenu] = useState(false)
 
-  const maskedKey = apiKey
-    ? `${apiKey.slice(0, 10)}...${apiKey.slice(-4)}`
-    : null
+  const maskedKey = apiKey ? `${apiKey.slice(0, 10)}...${apiKey.slice(-4)}` : null
 
   return (
     <nav
@@ -40,7 +38,7 @@ export default function Nav({ backLabel, backHref }: NavProps) {
           >
             ← {backLabel}
           </Link>
-        ) : (
+        ) : apiKey ? (
           <>
             <Link
               href="/roadmap"
@@ -57,58 +55,67 @@ export default function Nav({ backLabel, backHref }: NavProps) {
               + Add course
             </Link>
           </>
+        ) : (
+          <Link
+            href="/signup"
+            className="text-sm px-4 py-1.5 rounded-lg font-medium transition-colors"
+            style={{ background: 'var(--amber)', color: '#fff' }}
+          >
+            Sign up for Maestro
+          </Link>
         )}
 
-        {/* API key indicator */}
-        <div className="relative">
-          <button
-            onClick={() => setShowKeyMenu(v => !v)}
-            className="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer"
-            style={{
-              background: 'rgba(255,255,255,0.06)',
-              color: '#7a9ab0',
-              border: '1px solid rgba(255,255,255,0.08)',
-            }}
-          >
-            <span
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ background: apiKey ? 'var(--sage)' : '#e24b4a', display: 'inline-block' }}
-            />
-            API key
-          </button>
-
-          {showKeyMenu && (
-            <div
-              className="absolute right-0 top-full mt-2 rounded-xl p-3 z-50 min-w-52"
+        {apiKey && (
+          <div className="relative">
+            <button
+              onClick={() => setShowKeyMenu(v => !v)}
+              className="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer"
               style={{
-                background: '#fff',
-                border: '1px solid var(--stone-border)',
-                boxShadow: '0 4px 16px rgba(27,45,62,0.12)',
+                background: 'rgba(255,255,255,0.06)',
+                color: '#7a9ab0',
+                border: '1px solid rgba(255,255,255,0.08)',
               }}
             >
-              <p className="text-xs font-medium mb-1" style={{ color: 'var(--navy)' }}>
-                Your API key
-              </p>
-              <p
-                className="text-xs font-mono mb-3 truncate"
-                style={{ color: 'var(--stone-muted)' }}
-              >
-                {maskedKey ?? 'No key set'}
-              </p>
-              <button
-                onClick={() => { clearApiKey(); setShowKeyMenu(false) }}
-                className="w-full text-xs py-1.5 rounded-lg text-left px-2 transition-colors"
+              <span
+                className="w-1.5 h-1.5 rounded-full"
+                style={{ background: 'var(--sage)', display: 'inline-block' }}
+              />
+              API key
+            </button>
+
+            {showKeyMenu && (
+              <div
+                className="absolute right-0 top-full mt-2 rounded-xl p-3 z-50 min-w-52"
                 style={{
-                  color: '#a32d2d',
-                  background: '#fcebeb',
-                  border: '1px solid #f7c1c1',
+                  background: '#fff',
+                  border: '1px solid var(--stone-border)',
+                  boxShadow: '0 4px 16px rgba(27,45,62,0.12)',
                 }}
               >
-                Remove key → sign out
-              </button>
-            </div>
-          )}
-        </div>
+                <p className="text-xs font-medium mb-1" style={{ color: 'var(--navy)' }}>
+                  Your API key
+                </p>
+                <p
+                  className="text-xs font-mono mb-3 truncate"
+                  style={{ color: 'var(--stone-muted)' }}
+                >
+                  {maskedKey}
+                </p>
+                <button
+                  onClick={() => { clearApiKey(); setShowKeyMenu(false) }}
+                  className="w-full text-xs py-1.5 rounded-lg text-left px-2 transition-colors"
+                  style={{
+                    color: '#a32d2d',
+                    background: '#fcebeb',
+                    border: '1px solid #f7c1c1',
+                  }}
+                >
+                  Remove key → sign out
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </nav>
   )

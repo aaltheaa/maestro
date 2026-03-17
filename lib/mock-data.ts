@@ -178,3 +178,79 @@ export const BROWSE_COURSES = [
   { title: 'Drawing & Composition', dept: 'Art & Design', meta: '10 weeks · 22 lectures' },
   { title: 'History of Western Art', dept: 'Art & Archaeology', meta: '16 weeks · 32 lectures' },
 ]
+
+// Demo data for the landing-page mock experience
+export const DEMO_DISCOVER_RESPONSE = {
+  query: "I want to learn the history of fashion and graphic design, but I'm starting from scratch.",
+  text:
+    "Great goal. To understand how fashion and graphic design talk to each other, we'll start by giving you a visual foundation, then layer in design history and fashion theory.\n\nHere's a three-course path that moves from drawing and visual thinking, into typography and graphic design, and finally into fashion as a cultural language.",
+  courses: [
+    {
+      name: 'Visual Foundations: Drawing & Composition',
+      dept: 'Art & Design',
+      weeks: '8 weeks · 16 lectures',
+      url: 'https://ocw.mit.edu',
+    },
+    {
+      name: 'History of Graphic Design: Typography & Visual Culture',
+      dept: 'Architecture & Planning',
+      weeks: '14 weeks · 24 lectures',
+      url: 'https://ocw.mit.edu',
+    },
+    {
+      name: 'Fashion, Culture & Identity',
+      dept: 'Comparative Media Studies',
+      weeks: '10 weeks · 18 lectures',
+      url: 'https://ocw.mit.edu',
+    },
+  ],
+}
+
+export const DEMO_ROADMAP: Roadmap = {
+  id: 'demo-roadmap',
+  goal: 'history of graphic design and fashion',
+  createdAt: '2025-01-10T10:00:00Z',
+  courses: [
+    {
+      id: 1,
+      status: 'done',
+      progress: 100,
+      title: 'Visual Foundations: Drawing & Composition',
+      dept: 'Art & Design',
+      weeks: 8,
+      lectures: 16,
+      prof: 'Prof. Muriel Cooper',
+      skills: ['Visual thinking', 'Composition', 'Form & space'],
+      why:
+        "Builds essential visual literacy before engaging with design history. You'll learn to see before you learn to read history.",
+    },
+    {
+      id: 2,
+      status: 'active',
+      progress: 35,
+      title: 'History of Graphic Design: Typography & Visual Culture',
+      dept: 'Architecture & Planning',
+      weeks: 14,
+      lectures: 24,
+      prof: 'Prof. David Reinfurt',
+      skills: ['Typography', 'Print culture', 'Design movements'],
+      highlightSkill: 'Typography',
+      why:
+        'Your primary course. Traces graphic design from Gutenberg to the digital era with deep focus on typography as cultural force.',
+    },
+    {
+      id: 3,
+      status: 'next',
+      progress: 0,
+      title: 'Fashion, Culture & Identity',
+      dept: 'Comparative Media Studies',
+      weeks: 10,
+      lectures: 18,
+      prof: 'Prof. Anne Hollander',
+      skills: ['Fashion theory', 'Cultural semiotics', 'Visual identity'],
+      highlightSkill: 'Fashion theory',
+      why:
+        'Pairs directly with your design history work — examines how dress functions as a form of visual communication.',
+    },
+  ],
+}

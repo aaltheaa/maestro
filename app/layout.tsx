@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { ApiKeyProvider } from '@/lib/api-key-context'
-import ApiKeyGate from '@/components/ApiKeyGate'
 
 export const metadata: Metadata = {
   title: 'Maestro — Learn MIT OpenCourseWare',
@@ -18,9 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <ApiKeyProvider>
-          <ApiKeyGate>{children}</ApiKeyGate>
-        </ApiKeyProvider>
+        <ApiKeyProvider>{children}</ApiKeyProvider>
       </body>
     </html>
   )
